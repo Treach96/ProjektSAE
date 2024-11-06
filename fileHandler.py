@@ -1,15 +1,19 @@
-
+import jsonHandler
+# The fileHandler will define the modus the user wants to use and
+# check for the filetype to parse it to an appropriate handler
 READ_MODUS = "r"
 WRITE_MODUS = "w"
 READ_AND_WRITE_MODUS = "r+"
 WRITE_AND_READ_MODUS = "w+"
-def initial():
-    print("Hello")
 
-def openFile(filepath):
-    file = open(filepath)
+def openFile(filePath):
     modus = askForModus()
-    parserSwitch(file, modus)
+    if modus == READ_MODUS:
+        file = open(filePath, modus)
+        for line in file:
+            print(line)
+    else:
+       handlerSwitch(filePath, modus)
 
 def askForModus():
     userIn = input("What do you want to do?\n"
@@ -23,21 +27,21 @@ def askForModus():
 
 def modeSwitch(userIn):
     match userIn:
-        case 1:
+        case "1":
             return READ_MODUS
-        case 2:
+        case "2":
             return WRITE_MODUS
-        case 3:
+        case "3":
             return READ_AND_WRITE_MODUS
-        case 4:
+        case "4":
             return WRITE_AND_READ_MODUS
 
-def checkForFileType(file):
-    filesplit = file.split(".")
+def checkForFileType(filepath):
+    filesplit = filepath.split(".")
     return filesplit[1]
 
-def parserSwitch(file, modus):
-    filetype = checkForFileType(file)
+def handlerSwitch(filePath, modus):
+    filetype = checkForFileType(filePath)
     match filetype:
         case "json":
-            jsonParser.useFile(file, modus)
+            jsonHandler.useFile(filePath, modus)

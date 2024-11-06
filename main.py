@@ -2,14 +2,14 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import fileHandler
 
-# retrieve filePath and check filetype
+# retrieve filePath and parse it to the fileHandler
 def getFileFrom():
     Tk().withdraw()
     filePath = askopenfilename()
     return filePath
 
-def parseFileToProcess(file):
-        fileHandler.openFile(file)
+def parseFileToProcess(filePath):
+        fileHandler.openFile(filePath)
 
-file = getFileFrom()
-parseFileToProcess(file)
+filePath = getFileFrom()
+parseFileToProcess(filePath)

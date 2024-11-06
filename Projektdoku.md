@@ -10,3 +10,8 @@ Folgendes muss gegeben sein:
   (zum Beispiel Ersetzten eines bestimmten Wortes durch ein anderes)
 - Mindestens zwei der folgenden Techniken/Formate benutzen:
   XML,CSV,JSON,SQL
+
+Programmablauf:
+Main --> Fragt nach dem Dateipfad und leitet diesen an den fileHandler weiter
+fileHandler --> Falls Datei nur gelesen werden soll, öffnet dieser die Datei und printed den ganzen Inhalt
+            --> Falls anderer Modus gewünscht, wird der Dateipfad an entsprechenden Handler weitergeleitet
