@@ -1,6 +1,12 @@
 # Projektdokumentation
+Abgabe 16.12.24
 
 Sample data generated with
 https://mockaroo.com/
 
-Transform Data from SQL to JSON and vice versa
+Folgendes muss gegeben sein:
+- Externe Text Datei lesen und Schreiben
+- Automatisierte Veränderung der Informationen/Daten anhand Benutzereingaben
+  (zum Beispiel Ersetzten eines bestimmten Wortes durch ein anderes)
+- Mindestens zwei der folgenden Techniken/Formate benutzen:
+  XML,CSV,JSON,SQL
