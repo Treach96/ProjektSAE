@@ -21,7 +21,7 @@ def askForModus():
                   "Use the number to select your choice:\n"
                   "1. read -- only shows content of file\n"
                   "2. write -- current content will be overridden\n"
-                  "3. read and write -- shows file and writes to it\n"
+                  "3. read and write -- adds content at the beginning of file\n"
                   "4. write and read -- shows file and truncates it, removing its existing content\n"
                    "> ")
     return modeSwitch(userIn)
