@@ -1,6 +1,7 @@
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-import fileHandler
+import fileHandler as fiHan
+
 
 # retrieve filePath and parse it to the fileHandler
 def getFileFrom():
@@ -8,8 +9,10 @@ def getFileFrom():
     filePath = askopenfilename()
     return filePath
 
+
 def parseFileToProcess(filePath):
-        fileHandler.openFile(filePath)
+    fiHan.openFile(filePath)
+
 
 filePath = getFileFrom()
 parseFileToProcess(filePath)

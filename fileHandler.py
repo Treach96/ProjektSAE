@@ -12,12 +12,13 @@ def openFile(filePath):
         file = open(filePath, modus)
         for line in file:
             print(line)
+        file.close()
     else:
        handlerSwitch(filePath, modus)
 
 def askForModus():
-    userIn = input("What do you want to do?\n"
-                  "Use numbers to select your choice:\n"
+    userIn = input("What do you want to do with the file?\n"
+                  "Use the number to select your choice:\n"
                   "1. read -- only shows content of file\n"
                   "2. write -- current content will be overridden\n"
                   "3. read and write -- shows file and writes to it\n"
@@ -28,6 +29,7 @@ def askForModus():
 def modeSwitch(userIn):
     match userIn:
         case "1":
+            print("You selected read mode. File will be printed into console.")
             return READ_MODUS
         case "2":
             return WRITE_MODUS
