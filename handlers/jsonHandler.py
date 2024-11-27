@@ -1,3 +1,6 @@
+from importlib.util import source_hash
+
+
 class jsonHandler:
     def __init__(self):
         pass
@@ -34,33 +37,34 @@ def writeAndRead(filePath, modus):
 def readAndWrite(filePath, modus):
     choice = askUserForChoice()
     if choice == "change":
-        print("change")
-        file = open(filePath, modus)
-        printFileWithLineNumbers(filePath)
-        line = askForLine(file)
-        # todo: read keys from file
-        key = askForKey(filePath)
+        file = open(filePath)
+        content = file.readlines()
+
+        printFileWithLineNumbers(content)
+        lineNumber = askForLine(file)
+        # File in verschiedene Zeilen aufsplitten
+        # Zeilen in Array packen?
+        # Anschließend Zeile auswählen
+        # Dann dict aus Zeile erstellen und key auswählen
+        # Value des Keys anpassen
+#       lineNr = askForLine(filePath)
     if choice == "append":
         printFileWithLineNumbers(filePath)
         file = open(filePath, 'a')
         appendToFile(file)
         file.close()
         printFile(filePath)
-    file.close()
 
 
 def appendToFile(file):
     newLine = input("Please enter your content:\n"
                     "> ")
-    file.write(newLine + '\n')
+    file.write('\n' + newLine)
 
 
-def printFileWithLineNumbers(filePath):
-    file = open(filePath)
-    for index, line in enumerate(file):
-        print(index, line)
-    file.close()
-
+def printFileWithLineNumbers(content):
+    for index, line in enumerate(content):
+        print(f"{index}. {line}")
 
 def printFile(filePath):
     file = open(filePath)
@@ -81,7 +85,6 @@ def askForLine(file):
         lineNumber = lineToNumber()
         valid = checkLineNumber(lineNumber, file)
     return lineNumber
-
 
 def checkLineNumber(lineNumber, file):
     numberToCheck = lineNumber
