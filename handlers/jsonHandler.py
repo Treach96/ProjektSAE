@@ -34,20 +34,26 @@ def writeAndRead(filePath, modus):
     printFileWithLineNumbers(file)
 
 
+def getKeysFromLineContent(lineContent):
+    pass
+
+
 def readAndWrite(filePath, modus):
     choice = askUserForChoice()
     if choice == "change":
         file = open(filePath)
-        content = file.readlines()
+        content: [] = file.readlines()
 
         printFileWithLineNumbers(content)
-        lineNumber = askForLine(file)
-        # File in verschiedene Zeilen aufsplitten
-        # Zeilen in Array packen?
-        # Anschließend Zeile auswählen
-        # Dann dict aus Zeile erstellen und key auswählen
-        # Value des Keys anpassen
-#       lineNr = askForLine(filePath)
+    #  lineContent = askForLine(file)
+    #      keys, values = getKeysFromLineContent(lineContent)
+    #    print(f" Key: {keys}, value: {values}")
+    # File in verschiedene Zeilen aufsplitten
+    # Zeilen in Array packen?
+    # Anschließend Zeile auswählen
+    # Dann dict aus Zeile erstellen und key auswählen
+    # Value des Keys anpassen
+    #       lineNr = askForLine(filePath)
     if choice == "append":
         printFileWithLineNumbers(filePath)
         file = open(filePath, 'a')
@@ -63,8 +69,9 @@ def appendToFile(file):
 
 
 def printFileWithLineNumbers(content):
-    for index, line in enumerate(content):
-        print(f"{index}. {line}")
+    # first json File needs to be split on , so we can create an array of json stings
+    # after that each element of the array should be printed as new line with new index number
+    accessIndexOfList(content)
 
 def printFile(filePath):
     file = open(filePath)
@@ -72,6 +79,10 @@ def printFile(filePath):
         print(line)
     file.close()
 
+
+def accessIndexOfList(content):
+    split_data = content[0].split('},')
+    print(split_data)
 
 def lineToNumber():
     convertedNumber = int(input("Which line do you want to change?\n"
@@ -84,7 +95,12 @@ def askForLine(file):
     while not valid:
         lineNumber = lineToNumber()
         valid = checkLineNumber(lineNumber, file)
-    return lineNumber
+        file.seek(0)
+        lineContent = file.readlines()
+        print(
+            f"You selected line: {lineNumber} and the content is: \n{lineContent[lineNumber]}")
+    return lineContent[lineNumber]
+
 
 def checkLineNumber(lineNumber, file):
     numberToCheck = lineNumber
@@ -97,8 +113,9 @@ def checkLineNumber(lineNumber, file):
 
 def countLinesFromFile(file):
     counter = 0
-    for index, line in enumerate(file):
-        counter += index
+    file.seek(0)
+    for line in enumerate(file):
+        counter += 1
     return counter
 
 
@@ -108,6 +125,7 @@ def askForKey(filePath):
     value = getValueFromJsonWithKey(filePath, key)
     print(value)
 
+
 def getValueFromJsonWithKey(filePath, key):
     with open(filePath, 'r') as file:
         data = file.read()
@@ -116,22 +134,7 @@ def getValueFromJsonWithKey(filePath, key):
 
 
 def convertFileToDict(filePath):
-    # todo: convert file to dict so key of json can be used
-    file = open(filePath)
-    data = file.read()
-    dict = eval(data)
-
-    # Remove surrounding brackets and split file
-    items = data.strip()[1:-1].split('},{')
-    result = []
-    for item in items:
-        # Add cury brackets back to each item
-        item = '{' + item + '}'
-        # Convert the string representation of a dict in and actuallz dict
-        item_dict = eval(item)
-        result.append(item_dict)
-    return result
-
+    pass
 
 
 def askUserForChoice():
