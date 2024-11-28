@@ -42,7 +42,7 @@ def readAndWrite(filePath, modus):
     choice = askUserForChoice()
     if choice == "change":
         file = open(filePath)
-        content: [] = file.readlines()
+        content = file.read()
 
         printFileWithLineNumbers(content)
     #  lineContent = askForLine(file)
@@ -73,6 +73,7 @@ def printFileWithLineNumbers(content):
     # after that each element of the array should be printed as new line with new index number
     accessIndexOfList(content)
 
+
 def printFile(filePath):
     file = open(filePath)
     for line in file:
@@ -81,8 +82,13 @@ def printFile(filePath):
 
 
 def accessIndexOfList(content):
-    split_data = content[0].split('},')
-    print(split_data)
+    print(content)
+    dataArr: [] = content.split('},')
+    print(dataArr)
+    dataComplete: [] = [item + '}' if i <len(dataArr) -1 else item for i, item in enumerate(dataArr)]
+    for index, item in enumerate(dataComplete):
+        print(f"{index}. {item}")
+
 
 def lineToNumber():
     convertedNumber = int(input("Which line do you want to change?\n"
