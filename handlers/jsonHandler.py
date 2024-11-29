@@ -9,6 +9,9 @@ def useFile(filePath, modus):
 
 def modusHandler(modus, filePath):
     match modus:
+        case "r":
+            print("Read mode activated:")
+            read(filePath)
         case "r+":
             print("Read and Write mode activated")
             readAndWrite(filePath, modus)
@@ -16,6 +19,11 @@ def modusHandler(modus, filePath):
             print("Write and Read mode activated, file will be overridden")
             writeAndRead(filePath, modus)
 
+def read(filePath: str):
+    file = open(filePath, 'r')
+    content = file.read()
+    dataArr = createDataArray(content)
+    printContentWithLineNumber(dataArr)
 
 def writeToFile(filePath, modus):
     file = open(filePath, modus)
@@ -24,7 +32,6 @@ def writeToFile(filePath, modus):
     print(content)
     file.write(content)
     file.close()
-
 
 def writeAndRead(filePath, modus):
     ...
@@ -37,7 +44,7 @@ def getKeysFromLineContent(lineContent):
 def readAndWrite(filePath, modus):
     choice = askUserForChoice()
     if choice == "change":
-        file = open(filePath)
+        file = open(filePath, modus)
         content = file.read()
         dataArray: [] = createDataArray(content)
         printContentWithLineNumber(dataArray)
@@ -67,7 +74,7 @@ def getLineFromArray(arr: []):
 def appendToFile(file):
     newLine = input("Please enter your content:\n"
                     "> ")
-    file.write(newLine)
+    file.write(newLine + ",")
 
 
 def printContentWithLineNumber(dataArray: []):
