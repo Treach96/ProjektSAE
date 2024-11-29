@@ -1,6 +1,3 @@
-from importlib.util import source_hash
-
-
 class jsonHandler:
     def __init__(self):
         pass
@@ -32,6 +29,7 @@ def writeToFile(filePath, modus):
 def writeAndRead(filePath, modus):
     pass
 
+
 def getKeysFromLineContent(lineContent):
     pass
 
@@ -44,7 +42,7 @@ def readAndWrite(filePath, modus):
         dataArray: [] = createDataArray(content)
         printContentWithLineNumber(dataArray)
         lineToAdjust = getLineFromArray(dataArray)
-        print(lineToAdjust)
+        # print(lineToAdjust)
     #  lineContent = askForLine(file)
     #      keys, values = getKeysFromLineContent(lineContent)
     #    print(f" Key: {keys}, value: {values}")
@@ -62,6 +60,7 @@ def readAndWrite(filePath, modus):
 
 def getLineFromArray(arr: []):
     number = askForLineNumber(arr)
+    print(f"You chose line {number} with content:\n{arr[number]}")
     return arr[number]
 
 
@@ -83,9 +82,17 @@ def createDataArray(content):
     return dataComplete
 
 
-def askForLineNumber():
+def askForLineNumber(arr: []):
     convertedNumber = int(input("Which line do you want to change?\n"
                                 "> "))
+    arrLenght = len(arr)
+    valid = False
+    while not valid:
+        if convertedNumber >= 0 | convertedNumber < arrLenght:
+            valid = True
+        else:
+            convertedNumber = int(input("Which line do you want to change?\n"
+                                        "> "))
     return convertedNumber
 
 
