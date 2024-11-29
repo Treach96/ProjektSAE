@@ -27,11 +27,11 @@ def writeToFile(filePath, modus):
 
 
 def writeAndRead(filePath, modus):
-    pass
+    ...
 
 
 def getKeysFromLineContent(lineContent):
-    pass
+    ...
 
 
 def readAndWrite(filePath, modus):
@@ -96,11 +96,8 @@ def askForLineNumber(arr: []):
     return convertedNumber
 
 
-def askForKey(filePath):
-    key = input("Which key do want to change the value of?\n"
-                "> ")
-    value = getValueFromJsonWithKey(filePath, key)
-    print(value)
+def askForKey(arr: []):
+    ...
 
 
 def getValueFromJsonWithKey(filePath, key):
@@ -108,10 +105,6 @@ def getValueFromJsonWithKey(filePath, key):
         data = file.read()
         json_data = eval(data)
         print(json_data.get(key))
-
-
-def convertFileToDict(filePath):
-    pass
 
 
 def askUserForChoice():
