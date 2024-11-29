@@ -30,9 +30,7 @@ def writeToFile(filePath, modus):
 
 
 def writeAndRead(filePath, modus):
-    file = open(filePath, modus)
-    printFileWithLineNumbers(file)
-
+    pass
 
 def getKeysFromLineContent(lineContent):
     pass
@@ -43,8 +41,10 @@ def readAndWrite(filePath, modus):
     if choice == "change":
         file = open(filePath)
         content = file.read()
-
-        printFileWithLineNumbers(content)
+        dataArray: [] = createDataArray(content)
+        printContentWithLineNumber(dataArray)
+        lineToAdjust = getLineFromArray(dataArray)
+        print(lineToAdjust)
     #  lineContent = askForLine(file)
     #      keys, values = getKeysFromLineContent(lineContent)
     #    print(f" Key: {keys}, value: {values}")
@@ -55,74 +55,38 @@ def readAndWrite(filePath, modus):
     # Value des Keys anpassen
     #       lineNr = askForLine(filePath)
     if choice == "append":
-        printFileWithLineNumbers(filePath)
         file = open(filePath, 'a')
         appendToFile(file)
         file.close()
-        printFile(filePath)
+
+
+def getLineFromArray(arr: []):
+    number = askForLineNumber(arr)
+    return arr[number]
 
 
 def appendToFile(file):
     newLine = input("Please enter your content:\n"
                     "> ")
-    file.write('\n' + newLine)
+    file.write(newLine)
 
 
-def printFileWithLineNumbers(content):
-    # first json File needs to be split on , so we can create an array of json stings
-    # after that each element of the array should be printed as new line with new index number
-    accessIndexOfList(content)
-
-
-def printFile(filePath):
-    file = open(filePath)
-    for line in file:
-        print(line)
-    file.close()
-
-
-def accessIndexOfList(content):
-    print(content)
-    dataArr: [] = content.split('},')
-    print(dataArr)
-    dataComplete: [] = [item + '}' if i <len(dataArr) -1 else item for i, item in enumerate(dataArr)]
-    for index, item in enumerate(dataComplete):
+def printContentWithLineNumber(dataArray: []):
+    for index, item in enumerate(dataArray):
         print(f"{index}. {item}")
 
 
-def lineToNumber():
+def createDataArray(content):
+    dataArr: [] = content.split('},')
+    dataComplete: [] = [item + '}' if i < len(dataArr) - 1 else item for i, item
+                        in enumerate(dataArr)]
+    return dataComplete
+
+
+def askForLineNumber():
     convertedNumber = int(input("Which line do you want to change?\n"
                                 "> "))
     return convertedNumber
-
-
-def askForLine(file):
-    valid = False
-    while not valid:
-        lineNumber = lineToNumber()
-        valid = checkLineNumber(lineNumber, file)
-        file.seek(0)
-        lineContent = file.readlines()
-        print(
-            f"You selected line: {lineNumber} and the content is: \n{lineContent[lineNumber]}")
-    return lineContent[lineNumber]
-
-
-def checkLineNumber(lineNumber, file):
-    numberToCheck = lineNumber
-    lineCounter = int(countLinesFromFile(file))
-    if numberToCheck in range(lineCounter):
-        return True
-    else:
-        return False
-
-
-def countLinesFromFile(file):
-    counter = 0
-    file.seek(0)
-    for line in enumerate(file):
-        counter += 1
-    return counter
 
 
 def askForKey(filePath):
