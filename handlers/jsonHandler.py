@@ -26,7 +26,8 @@ def modusHandler(modus: str, filePath: str):
 def read(filePath: str):
     file = open(filePath, 'r')
     content = file.read()
-    dataArr = createDataArray(content)
+    formattedContent = formatContent(content)
+    dataArr = createDataArray(formattedContent)
     printContentWithLineNumber(dataArr)
     file.close()
 
@@ -45,8 +46,8 @@ def readAndWrite(filePath: str, modus: str):
         ### retrieving data
         file = open(filePath, modus)
         content = file.read()
-        print(content)
-        dataArray: [] = createDataArray(content)
+        formattedContent = formatContent(content)
+        dataArray: [] = createDataArray(formattedContent)
         printContentWithLineNumber(dataArray)
         ### isolate line from array
         number = askForLineNumber(dataArray)
@@ -55,18 +56,30 @@ def readAndWrite(filePath: str, modus: str):
         jsonDict = convertToDict(lineToAdjust)
         updatedDict = askForKeyAndUpdateDict(jsonDict)
         ### set new Value on chosen lineNumber
+        print(updatedDict)
         dataArray[number] = convertDictToJson(updatedDict)
         printContentWithLineNumber(dataArray)
-        print("save start")
-        ### todo fix saving -> changed value saved as Array, needs to be converted to this:
-        ## {"id":10,"first_name":"Clemmie","last_name":"Moncey","gender":"Female","street_name":"Nobel"},
-        # saveNewFile(file, dataArray)
-        print("save end")
+        saveNewFile(file, dataArray)
         ### saving content to file
     if choice == "append":
         file = open(filePath, 'a')
         appendToFile(file)
         file.close()
+
+
+def formatContent(content: str):
+    contentNoBreaks = removeLineBreaks(content)
+    finalContent = removeWhitespace(contentNoBreaks)
+
+    return finalContent
+
+
+def removeLineBreaks(content: str):
+    return content.replace("\n", "")
+
+
+def removeWhitespace(content: str):
+    return content.replace(" ", "")
 
 
 def saveNewFile(file: TextIO, dataArray):
@@ -76,7 +89,6 @@ def saveNewFile(file: TextIO, dataArray):
     file.truncate()
     file.seek(0)
     content = file.read()
-    print(content)
 
 
 def askForKeyAndUpdateDict(jsonDict: dict):
@@ -87,11 +99,11 @@ def askForKeyAndUpdateDict(jsonDict: dict):
 
 
 def convertDictToJson(jsonDict: dict):
-    items = []
-    for key, value in jsonDict.items():
-        items.append(f'"{key}":"{value}"')
-    return items
+    # replace ' with "
+    lineToReplace = ""
 
+    print(lineToReplace)
+    return lineToReplace
 
 def convertToDict(lineToAdjust):
     jsonObject: dict = {}
@@ -103,7 +115,6 @@ def convertToDict(lineToAdjust):
         key = key.strip('"')
         value = value.strip('"')
         jsonObject[key] = value
-
     return jsonObject
 
 
