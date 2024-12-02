@@ -1,0 +1,5 @@
+Folgendes muss gegeben sein:
+--- Externe Text Datei lesen und Schreiben
+--- Automatisierte Veränderung der Informationen/Daten anhand Benutzereingaben
+    (zum Beispiel Ersetzten eines bestimmten Wortes durch ein anderes)
+--- Mindestens zwei der folgenden Techniken/Formate benutzen: XML,CSV,JSON,SQL
