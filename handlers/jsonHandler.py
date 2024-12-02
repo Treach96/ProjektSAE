@@ -58,8 +58,9 @@ def readAndWrite(filePath: str, modus: str):
         dataArray[number] = convertDictToJson(updatedDict)
         printContentWithLineNumber(dataArray)
         print("save start")
-        # todo fix saving
-        saveNewFile(file, dataArray)
+        ### todo fix saving -> changed value saved as Array, needs to be converted to this:
+        ## {"id":10,"first_name":"Clemmie","last_name":"Moncey","gender":"Female","street_name":"Nobel"},
+        # saveNewFile(file, dataArray)
         print("save end")
         ### saving content to file
     if choice == "append":
@@ -70,8 +71,10 @@ def readAndWrite(filePath: str, modus: str):
 
 def saveNewFile(file: TextIO, dataArray):
     file.seek(0)
-    for item in enumerate(dataArray):
-        file.write(f"{item},")
+    for item in dataArray:
+        file.write(f'{item},')
+    file.truncate()
+    file.seek(0)
     content = file.read()
     print(content)
 
