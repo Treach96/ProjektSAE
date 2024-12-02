@@ -56,7 +56,7 @@ def readAndWrite(filePath: str, modus: str):
         dataArray[number] = convertBackToString(updatedDict)
         printContentWithLineNumber(dataArray)
     ### saving content to file
-        saveNewFile(file, dataArray)
+        saveToFile(file, dataArray)
     if choice == "append":
         file = open(filePath, 'a')
         appendToFile(file)
@@ -66,7 +66,6 @@ def readAndWrite(filePath: str, modus: str):
 def formatContent(content: str):
     contentNoBreaks = removeLineBreaks(content)
     finalContent = removeWhitespace(contentNoBreaks)
-
     return finalContent
 
 
@@ -78,13 +77,11 @@ def removeWhitespace(content: str):
     return content.replace(" ", "").replace("\\", "")
 
 
-def saveNewFile(file, dataArray):
+def saveToFile(file, dataArray):
     file.seek(0)
     for item in dataArray:
         file.write(f'{item},')
     file.truncate()
-    file.seek(0)
-    content = file.read()
 
 
 def askForKeyAndUpdateDict(jsonDict: dict):
