@@ -1,6 +1,3 @@
-from typing import SupportsIndex, TextIO
-
-
 class jsonHandler:
     def __init__(self):
         pass
@@ -43,24 +40,23 @@ def writeToFile(filePath: str, modus: str):
 def readAndWrite(filePath: str, modus: str):
     choice = askUserForChoice()
     if choice == "change":
-        ### retrieving data
+    ### retrieving data
         file = open(filePath, modus)
         content = file.read()
         formattedContent = formatContent(content)
         dataArray: [] = createDataArray(formattedContent)
         printContentWithLineNumber(dataArray)
-        ### isolate line from array
+    ### isolate line from array
         number = askForLineNumber(dataArray)
         lineToAdjust = getLineFromArray(dataArray, number)
-        ### access key
+    ### access key
         jsonDict = convertToDict(lineToAdjust)
+    ### set new Value on chosen lineNumber
         updatedDict = askForKeyAndUpdateDict(jsonDict)
-        ### set new Value on chosen lineNumber
-        print(updatedDict)
-        dataArray[number] = convertDictToJson(updatedDict)
+        dataArray[number] = convertBackToString(updatedDict)
         printContentWithLineNumber(dataArray)
+    ### saving content to file
         saveNewFile(file, dataArray)
-        ### saving content to file
     if choice == "append":
         file = open(filePath, 'a')
         appendToFile(file)
@@ -75,14 +71,14 @@ def formatContent(content: str):
 
 
 def removeLineBreaks(content: str):
-    return content.replace("\n", "")
+    return content.replace("\n", "").replace("[", "").replace("]", "")
 
 
 def removeWhitespace(content: str):
-    return content.replace(" ", "")
+    return content.replace(" ", "").replace("\\", "")
 
 
-def saveNewFile(file: TextIO, dataArray):
+def saveNewFile(file, dataArray):
     file.seek(0)
     for item in dataArray:
         file.write(f'{item},')
@@ -98,15 +94,35 @@ def askForKeyAndUpdateDict(jsonDict: dict):
     return jsonDict
 
 
-def convertDictToJson(jsonDict: dict):
-    # replace ' with "
-    lineToReplace = ""
+def convertBackToString(jsonDict: dict):
+    # Convert dict back to array to further
+    # adjust string to prepare for insert into file
+    ### Convert to Array
+    dataArr = []
+    partString = ''
+    for key, value in jsonDict.items():
+        dataArr.append(f'"{key}":"{value}"')
 
-    print(lineToReplace)
-    return lineToReplace
+    # output: ['id:10', 'player_name:Emlynn', 'char_name:Bengle', 'Hp:31']
+    for index, item in enumerate(dataArr):
+        if index < len(dataArr) - 1:
+            partString += f'{item},'
+        else:
+            partString += f'{item}'
+
+    jsonString = "{" + partString + "}"
+    return jsonString
+
+def convert2(jsonDict: dict):
+    dataArr = []
+    for key, value in jsonDict.items():
+        dataArr.append(f'"{key}":"{value}"')
+
+    x = "{" + ",".join(dataArr) + "}"
+    print("Version 2: ", x)
 
 def convertToDict(lineToAdjust):
-    jsonObject: dict = {}
+    jsonDict: dict = {}
     jsonString = lineToAdjust.strip('{}')
     items = jsonString.split(',')
 
@@ -114,8 +130,8 @@ def convertToDict(lineToAdjust):
         key, value = item.split(':')
         key = key.strip('"')
         value = value.strip('"')
-        jsonObject[key] = value
-    return jsonObject
+        jsonDict[key] = value
+    return jsonDict
 
 
 def getLineFromArray(arr: [], number: int):
