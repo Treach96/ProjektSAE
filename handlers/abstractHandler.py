@@ -9,6 +9,7 @@ class Handler(ABC):
         self.modusHandler(modus, filePath)
 
     @abstractmethod
+    # todo: add loop for content
     def modusHandler(self, modus: str, filePath: str):
         match modus:
             case "r":
@@ -65,7 +66,7 @@ class Handler(ABC):
 
     @abstractmethod
     def askForLineNumber(self, arr: []):
-        convertedNumber = int(input("Which line do you want to change?\n"
+        convertedNumber = int(input("Which line do you want to change?\nInsert number"
                                     "> "))
         arrLength = len(arr)
         valid = False
@@ -85,6 +86,7 @@ class Handler(ABC):
 
     @abstractmethod
     def askUserForChoice(self):
+        # todo: loop after change "do you want to further adjust some keys?" no -> loop with read/ r+/ w+ -> no -> exit
         userInput = input(
             "\nWhat do you want to do here? Select number to choose:\n"
             "1. change value of key\n"

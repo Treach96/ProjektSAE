@@ -7,7 +7,8 @@ from handlers import fileHandler
 # retrieve filePath and parse it to the fileHandler
 def getFileFrom():
     Tk().withdraw()
-    filePath = askopenfilename()
+    filePath = askopenfilename(filetypes=[("JSON files", "*.json"), ("CSV files", "*.csv")])
+
     return filePath
 
 
