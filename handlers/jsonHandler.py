@@ -2,6 +2,49 @@ from handlers.abstractHandler import Handler
 
 
 class jsonHandler(Handler):
+    def askForKey(self, jsonDict: dict):
+        return super().askForKey(jsonDict)
+
+    def askForKeyAndUpdateDict(self, jsonDict: dict):
+        return super().askForKeyAndUpdateDict(jsonDict)
+
+    def convertToDict(self, lineToAdjust):
+        jsonDict: dict = {}
+        jsonString = lineToAdjust.strip('{}')
+        items = jsonString.split(',')
+
+        for item in items:
+            key, value = item.split(':')
+            key = key.strip('"')
+            value = value.strip('"')
+            jsonDict[key] = value
+        print(jsonDict)
+        return jsonDict
+
+    def printContentWithLineNumber(self, dataArray: []):
+        super().printContentWithLineNumber(dataArray)
+
+    def askUserForChoice(self):
+        return super().askUserForChoice()
+
+    def getLineFromArray(self, arr: [], number: int):
+        return super().getLineFromArray(arr, number)
+
+    def askForLineNumber(self, arr: []):
+        return super().askForLineNumber(arr)
+
+    def createDataArray(self, content: str):
+        dataArr: [] = content.split('},')
+        dataLen = len(dataArr) - 1
+        dataArrComplete = []
+        for index, item in enumerate(dataArr):
+            if index < dataLen:
+                dataArrComplete.append(item + '}')
+            else:
+                dataArrComplete.append(item)
+
+        return dataArrComplete
+
     def __init__(self):
         pass
 
@@ -15,8 +58,8 @@ class jsonHandler(Handler):
         file = open(filePath, 'r')
         content = file.read()
         formattedContent = formatContent(content)
-        dataArr = createDataArray(formattedContent)
-        printContentWithLineNumber(dataArr)
+        dataArr = self.createDataArray(formattedContent)
+        self.printContentWithLineNumber(dataArr)
         file.close()
 
     def writeToFile(self, filePath: str, modus: str):
@@ -27,24 +70,24 @@ class jsonHandler(Handler):
         file.close()
 
     def readAndWrite(self, filePath: str, modus: str):
-        choice = askUserForChoice()
+        choice = self.askUserForChoice()
         if choice == "change":
-        ### retrieving data
+            ### retrieving data
             file = open(filePath, modus)
             content = file.read()
             formattedContent = formatContent(content)
-            dataArray: [] = createDataArray(formattedContent)
-            printContentWithLineNumber(dataArray)
-        ### isolate line from array
-            number = askForLineNumber(dataArray)
-            lineToAdjust = getLineFromArray(dataArray, number)
-        ### access key
-            jsonDict = convertToDict(lineToAdjust)
-        ### set new Value on chosen lineNumber
-            updatedDict = askForKeyAndUpdateDict(jsonDict)
+            dataArray: [] = self.createDataArray(formattedContent)
+            self.printContentWithLineNumber(dataArray)
+            ### isolate line from array
+            number = self.askForLineNumber(dataArray)
+            lineToAdjust = self.getLineFromArray(dataArray, number)
+            ### access key
+            jsonDict = self.convertToDict(lineToAdjust)
+            ### set new Value on chosen lineNumber
+            updatedDict = self.askForKeyAndUpdateDict(jsonDict)
             dataArray[number] = convertBackToString(updatedDict)
-            printContentWithLineNumber(dataArray)
-        ### saving content to file
+            self.printContentWithLineNumber(dataArray)
+            ### saving content to file
             saveToFile(file, dataArray)
         if choice == "append":
             file = open(filePath, 'a')
@@ -72,12 +115,6 @@ def saveToFile(file, dataArray):
         file.write(f'{item},')
     file.truncate()
 
-
-def askForKeyAndUpdateDict(jsonDict: dict):
-    key = askForKey(jsonDict)
-    newValue = input("Enter the new value:\n> ")
-    jsonDict[key] = newValue
-    return jsonDict
 
 
 def convertBackToString(jsonDict: dict):
@@ -109,24 +146,6 @@ def convert2(jsonDict: dict):
     print("Version 2: ", x)
 
 
-def convertToDict(lineToAdjust):
-    jsonDict: dict = {}
-    jsonString = lineToAdjust.strip('{}')
-    items = jsonString.split(',')
-
-    for item in items:
-        key, value = item.split(':')
-        key = key.strip('"')
-        value = value.strip('"')
-        jsonDict[key] = value
-    return jsonDict
-
-
-def getLineFromArray(arr: [], number: int):
-    print(f"You chose line {number} with content:\n{arr[number]}")
-    return arr[number]
-
-
 def appendToFile(file):
     newLine = input("Please enter your content:\n"
                     "> ")
@@ -137,42 +156,6 @@ def printContentWithLineNumber(dataArray: []):
     for index, item in enumerate(dataArray):
         print(f"{index}. {item}")
 
-
-def createDataArray(content: str):
-    dataArr: [] = content.split('},')
-    dataLen = len(dataArr) - 1
-    dataArrComplete = []
-    for index, item in enumerate(dataArr):
-        if index < dataLen:
-            dataArrComplete.append(item + '}')
-        else:
-            dataArrComplete.append(item)
-
-    return dataArrComplete
-
-
-def askForLineNumber(arr: []):
-    convertedNumber = int(input("Which line do you want to change?\n"
-                                "> "))
-    arrLength = len(arr)
-    valid = False
-    while not valid:
-        if convertedNumber >= 0 | convertedNumber < arrLength:
-            valid = True
-        else:
-            convertedNumber = int(input("Which line do you want to change?\n"
-                                        "> "))
-    return convertedNumber
-
-
-def askForKey(jsonDict: dict):
-    print("\nAvailable keys are:", list(jsonDict.keys()), "\n")
-    valid = False
-    while not valid:
-        choice = input("From which key would you like adjust the value?\n"
-                       "> ")
-        if choice in jsonDict.keys():
-            return choice
 
 
 def askUserForChoice():

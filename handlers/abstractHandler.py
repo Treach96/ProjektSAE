@@ -32,3 +32,66 @@ class Handler(ABC):
     @abstractmethod
     def writeToFile(self, filePath: str, modus: str):
         pass
+
+    @abstractmethod
+    def createDataArray(self, content: str):
+        pass
+
+    @abstractmethod
+    def convertToDict(self, lineToAdjust):
+        pass
+
+    @abstractmethod
+    def askForKeyAndUpdateDict(self, jsonDict: dict):
+        key = self.askForKey(jsonDict)
+        newValue = input("Enter the new value:\n> ")
+        jsonDict[key] = newValue
+        return jsonDict
+
+    @abstractmethod
+    def askForKey(self, jsonDict: dict):
+        print("\nAvailable keys are:", list(jsonDict.keys()), "\n")
+        valid = False
+        while not valid:
+            choice = input("From which key would you like adjust the value?\n"
+                           "> ")
+            if choice in jsonDict.keys():
+                return choice
+
+    @abstractmethod
+    def getLineFromArray(self, arr: [], number: int):
+        print(f"You chose line {number} with content:\n{arr[number]}")
+        return arr[number]
+
+    @abstractmethod
+    def askForLineNumber(self, arr: []):
+        convertedNumber = int(input("Which line do you want to change?\n"
+                                    "> "))
+        arrLength = len(arr)
+        valid = False
+        while not valid:
+            if convertedNumber >= 0 | convertedNumber < arrLength:
+                valid = True
+            else:
+                convertedNumber = int(
+                    input("Which line do you want to change?\n"
+                          "> "))
+        return convertedNumber
+
+    @abstractmethod
+    def printContentWithLineNumber(self, dataArray: []):
+        for index, item in enumerate(dataArray):
+            print(f"{index}. {item}")
+
+    @abstractmethod
+    def askUserForChoice(self):
+        userInput = input(
+            "\nWhat do you want to do here? Select number to choose:\n"
+            "1. change value of key\n"
+            "2. append new entry\n"
+            "> ")
+        match userInput:
+            case "1":
+                return "change"
+            case "2":
+                return "append"

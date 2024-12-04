@@ -1,4 +1,5 @@
 # kein direkter import des moduls jsonHandler sondern nur eine Referenz
+from handlers.csvHandler import csvHandler
 from handlers.jsonHandler import jsonHandler
 
 
@@ -55,4 +56,7 @@ def handlerSwitch(filePath, modus):
     match filetype:
         case "json":
             handler = jsonHandler()
+            handler.useFile(filePath, modus)
+        case "csv":
+            handler = csvHandler()
             handler.useFile(filePath, modus)
