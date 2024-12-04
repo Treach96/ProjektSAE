@@ -1,66 +1,55 @@
-class jsonHandler:
+from handlers.abstractHandler import Handler
+
+
+class jsonHandler(Handler):
     def __init__(self):
         pass
 
+    def useFile(self, filePath: str, modus: str):
+        super().modusHandler(modus, filePath)
 
-def useFile(filePath: str, modus: str):
-    modusHandler(modus, filePath)
+    def modusHandler(self, modus: str, filePath: str):
+        super().modusHandler(modus, filePath)
 
-
-def modusHandler(modus: str, filePath: str):
-    match modus:
-        case "r":
-            print("Read mode activated:")
-            read(filePath)
-        case "r+":
-            print("Read and Write mode activated")
-            readAndWrite(filePath, modus)
-        case "w+":
-            print("Write and Read mode activated, file will be overridden")
-            writeToFile(filePath, modus)
-
-
-def read(filePath: str):
-    file = open(filePath, 'r')
-    content = file.read()
-    formattedContent = formatContent(content)
-    dataArr = createDataArray(formattedContent)
-    printContentWithLineNumber(dataArr)
-    file.close()
-
-
-def writeToFile(filePath: str, modus: str):
-    file = open(filePath, modus)
-    content = input("Please type in the new content to be added:\n"
-                    "> ")
-    file.write(content)
-    file.close()
-
-
-def readAndWrite(filePath: str, modus: str):
-    choice = askUserForChoice()
-    if choice == "change":
-    ### retrieving data
-        file = open(filePath, modus)
+    def read(self, filePath: str):
+        file = open(filePath, 'r')
         content = file.read()
         formattedContent = formatContent(content)
-        dataArray: [] = createDataArray(formattedContent)
-        printContentWithLineNumber(dataArray)
-    ### isolate line from array
-        number = askForLineNumber(dataArray)
-        lineToAdjust = getLineFromArray(dataArray, number)
-    ### access key
-        jsonDict = convertToDict(lineToAdjust)
-    ### set new Value on chosen lineNumber
-        updatedDict = askForKeyAndUpdateDict(jsonDict)
-        dataArray[number] = convertBackToString(updatedDict)
-        printContentWithLineNumber(dataArray)
-    ### saving content to file
-        saveToFile(file, dataArray)
-    if choice == "append":
-        file = open(filePath, 'a')
-        appendToFile(file)
+        dataArr = createDataArray(formattedContent)
+        printContentWithLineNumber(dataArr)
         file.close()
+
+    def writeToFile(self, filePath: str, modus: str):
+        file = open(filePath, modus)
+        content = input("Please type in the new content to be added:\n"
+                        "> ")
+        file.write(content)
+        file.close()
+
+    def readAndWrite(self, filePath: str, modus: str):
+        choice = askUserForChoice()
+        if choice == "change":
+        ### retrieving data
+            file = open(filePath, modus)
+            content = file.read()
+            formattedContent = formatContent(content)
+            dataArray: [] = createDataArray(formattedContent)
+            printContentWithLineNumber(dataArray)
+        ### isolate line from array
+            number = askForLineNumber(dataArray)
+            lineToAdjust = getLineFromArray(dataArray, number)
+        ### access key
+            jsonDict = convertToDict(lineToAdjust)
+        ### set new Value on chosen lineNumber
+            updatedDict = askForKeyAndUpdateDict(jsonDict)
+            dataArray[number] = convertBackToString(updatedDict)
+            printContentWithLineNumber(dataArray)
+        ### saving content to file
+            saveToFile(file, dataArray)
+        if choice == "append":
+            file = open(filePath, 'a')
+            appendToFile(file)
+            file.close()
 
 
 def formatContent(content: str):
@@ -110,6 +99,7 @@ def convertBackToString(jsonDict: dict):
     jsonString = "{" + partString + "}"
     return jsonString
 
+
 def convert2(jsonDict: dict):
     dataArr = []
     for key, value in jsonDict.items():
@@ -117,6 +107,7 @@ def convert2(jsonDict: dict):
 
     x = "{" + ",".join(dataArr) + "}"
     print("Version 2: ", x)
+
 
 def convertToDict(lineToAdjust):
     jsonDict: dict = {}

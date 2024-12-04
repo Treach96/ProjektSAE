@@ -1,4 +1,5 @@
-from handlers import jsonHandler
+# kein direkter import des moduls jsonHandler sondern nur eine Referenz
+from handlers.jsonHandler import jsonHandler
 
 
 # The fileHandler will define the modus the user wants to use and
@@ -53,4 +54,5 @@ def handlerSwitch(filePath, modus):
     filetype = checkForFileType(filePath)
     match filetype:
         case "json":
-            jsonHandler.useFile(filePath, modus)
+            handler = jsonHandler()
+            handler.useFile(filePath, modus)
