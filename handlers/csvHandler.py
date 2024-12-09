@@ -22,9 +22,10 @@ class csvHandler(Handler):
         file.close()
 
     def readAndWrite(self, filePath: str, modus: str):
-        choice = self.askUserForChoice()
-        match choice:
-            case "change":
+        choice: str = ""
+        while choice != "exit":
+            choice = self.askUserForChoice()
+            if choice == "change":
                 print("changes will be made")
                 file = open(filePath, modus)
                 content: str = file.read()
@@ -37,7 +38,8 @@ class csvHandler(Handler):
                 dataArr[number]: str = self.convertBackToString(updatedDict)
                 self.printContentWithLineNumber(dataArr)
                 self.saveToFile(file, dataArr)
-            case "append":
+                file.close()
+            if choice == "append":
                 file = open(filePath, 'a')
                 self.appendToFile(file)
                 file.close()
@@ -49,7 +51,7 @@ class csvHandler(Handler):
         super().appendToFile(file)
 
     def saveToFile(self, file, dataArr: []):
-        pass
+        super().saveToFile(file, dataArr)
 
     def convertBackToString(self, jsonDict: dict):
         dataArr: [] = []

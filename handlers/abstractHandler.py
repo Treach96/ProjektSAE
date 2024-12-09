@@ -25,9 +25,21 @@ class Handler(ABC):
     @abstractmethod
     def saveToFile(self, file, dataArr: []):
         file.seek(0)
-        for item in dataArr:
-            file.write(f'{item},')
-        file.truncate()
+        saveFormat = askForSavingFormat()
+        if saveFormat == "default":
+            savingArr(file, dataArr)
+        if saveFormat == "json":
+            convertedArr: [] = convertToJson(dataArr)
+            savingArr(file, convertedArr)
+        if saveFormat == "csv":
+            convertedArr: [] = convertToCsv(dataArr)
+            savingArr(file, convertedArr)
+        # todo: ask for futher changes? no-> exit
+        choice: str = input("Do you want to do something else with this file?\n"
+                            "chose \"yes\" or \"no\"\n"
+                            "> ")
+        if choice == "no":
+            exit()
 
     @abstractmethod
     def convertBackToString(self, jsonDict: dict):
@@ -108,14 +120,67 @@ class Handler(ABC):
 
     @abstractmethod
     def askUserForChoice(self):
-        # todo: loop after change "do you want to further adjust some keys?" no -> loop with read/ r+/ w+ -> no -> exit
         userInput = input(
             "\nWhat do you want to do here? Select number to choose:\n"
             "1. change value of key\n"
             "2. append new entry\n"
+            "3. exit\n"
             "> ")
         match userInput:
             case "1":
                 return "change"
             case "2":
                 return "append"
+            case "3":
+                exit()
+
+
+def savingArr(file, dataArr: []):
+    dataLen = len(dataArr) - 1
+    for index, item in enumerate(dataArr):
+        if index == dataLen:
+            file.write(f'{item}')
+        else:
+            file.write(f'{item},')
+    file.truncate()
+
+
+def convertToJson(dataArr: []):
+    # todo: add converter
+    convertedArr: [] = []
+    return convertedArr
+    pass
+
+
+def convertToCsv(dataArr: []):
+    # todo: add converter
+    convertedArr: [] = []
+    return convertedArr
+    pass
+
+
+def askForSavingFormat():
+    valid = False
+    while not valid:
+        choice: str = input(
+            "Choose format. Insert number to select your choice.\n"
+            "0. default\n"
+            "1. json\n"
+            "2. csv\n"
+            "> ")
+        if choice == "0":
+            return "default"
+        if choice == "1":
+            return "json"
+        if choice == "2":
+            return "csv"
+
+
+def saveAsJson(dataArray: []):
+    # todo: implement converter
+    pass
+
+
+def saveAsCsv(dataArray: []):
+    # todo: implement converter
+    pass

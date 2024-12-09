@@ -24,15 +24,18 @@ def openFile(filePath):
 def askForModus():
     valid = False
     while not valid:
-        userIn = int(input("What do you want to do with the file?\n"
-                           "Use the number to select your choice:\n"
-                           "1. read -- only shows content of file\n"
-                           "2. read and write -- alter values or add new content\n"
-                           "3. write and read -- clear file and add new content\n"
-                           "4. exit\n"
-                           "> "))
-        if 4 >= userIn >= 1:
-            valid = True
+        try:
+            userIn = int(input("What do you want to do with the file?\n"
+                               "Use the number to select your choice:\n"
+                               "1. read -- only shows content of file\n"
+                               "2. read and write -- alter values or add new content\n"
+                               "3. write and read -- clear file and add new content\n"
+                               "4. exit\n"
+                               "> "))
+            if 4 >= userIn >= 1:
+                valid = True
+        except ValueError:
+            print("Please select a number.")
     return modeSwitch(userIn)
 
 
