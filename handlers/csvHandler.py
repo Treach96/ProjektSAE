@@ -36,8 +36,6 @@ class csvHandler(Handler):
                 updatedDict: dict = self.askForKeyAndUpdateDict(lineDict)
                 dataArr[number]: str = self.convertBackToString(updatedDict)
                 self.printContentWithLineNumber(dataArr)
-                print("updated:", updatedDict)
-                self.saveToFile(file, dataArr)
             case "append":
                 file = open(filePath, 'a')
                 self.appendToFile(file)
@@ -53,7 +51,15 @@ class csvHandler(Handler):
         pass
 
     def convertBackToString(self, jsonDict: dict):
-        pass
+        dataArr: [] = []
+        for key, value in jsonDict.items():
+            dataArr.append(f'"{value}",')
+
+        item: str = "".join(dataArr)
+        updatedString = item.replace("\"", "")
+        if updatedString.endswith(","):
+            updatedString = updatedString[:-1]
+        return updatedString
 
     def askForKeyAndUpdateDict(self, jsonDict: dict):
         return super().askForKeyAndUpdateDict(jsonDict)
