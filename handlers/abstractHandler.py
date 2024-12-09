@@ -23,6 +23,17 @@ class Handler(ABC):
                 self.writeToFile(filePath, modus)
 
     @abstractmethod
+    def saveToFile(self, file, dataArr: []):
+        file.seek(0)
+        for item in dataArr:
+            file.write(f'{item},')
+        file.truncate()
+
+    @abstractmethod
+    def convertBackToString(self, jsonDict: dict):
+        pass
+
+    @abstractmethod
     def read(self, filePath: str):
         pass
 
@@ -32,7 +43,11 @@ class Handler(ABC):
 
     @abstractmethod
     def writeToFile(self, filePath: str, modus: str):
-        pass
+        file = open(filePath, modus)
+        content: str = input("Please type in the new content to be added:\n"
+                             "> ")
+        file.write(content)
+        file.close()
 
     @abstractmethod
     def createDataArray(self, content: str):
@@ -41,6 +56,12 @@ class Handler(ABC):
     @abstractmethod
     def convertToDict(self, lineToAdjust):
         pass
+
+    @abstractmethod
+    def appendToFile(self, file):
+        newLine: str = input("Please enter your content:\n"
+                             "> ")
+        file.write(newLine + ",")
 
     @abstractmethod
     def askForKeyAndUpdateDict(self, jsonDict: dict):

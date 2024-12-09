@@ -5,6 +5,15 @@ from handlers.abstractHandler import Handler
 
 class csvHandler(Handler):
 
+    def appendToFile(self, file):
+        super().appendToFile(file)
+
+    def saveToFile(self, file, dataArr: []):
+        pass
+
+    def convertBackToString(self, jsonDict: dict):
+        pass
+
     def askForKeyAndUpdateDict(self, jsonDict: dict):
         return super().askForKeyAndUpdateDict(jsonDict)
 
@@ -13,6 +22,16 @@ class csvHandler(Handler):
 
     @override
     def convertToDict(self, lineToAdjust, dataArr: []):
+        """
+        Converts a line of CSV data into a dictionary using the first line of the CSV as keys.
+
+        Args:
+            lineToAdjust (str): The CSV line to be converted into a dictionary.
+            dataArr (List[str]):  The array of CSV lines, where the first line contains the keys.
+
+        Returns:
+            dict: A dictionary where the keys are from the first line of the CSV and the values are from the line to adjust.
+        """
         csvDict = {}
         keys: str = dataArr[0]
         keys: List[str] = keys.split(",")
@@ -60,16 +79,21 @@ class csvHandler(Handler):
             case "change":
                 print("changes will be made")
                 file = open(filePath, modus)
-                content = file.read()
+                content: str = file.read()
                 dataArr: [] = self.createDataArray(content)
                 super().printContentWithLineNumber(dataArr)
-                number = self.askForLineNumber(dataArr)
-                lineToAdjust = self.getLineFromArray(dataArr, number)
-                lineDict = self.convertToDict(lineToAdjust, dataArr)
-                updatedDict = self.askForKeyAndUpdateDict(lineDict)
-                print(updatedDict)
+                number: int = self.askForLineNumber(dataArr)
+                lineToAdjust: [] = self.getLineFromArray(dataArr, number)
+                lineDict: dict = self.convertToDict(lineToAdjust, dataArr)
+                updatedDict: dict = self.askForKeyAndUpdateDict(lineDict)
+                dataArr[number]: str = self.convertBackToString(updatedDict)
+                self.printContentWithLineNumber(dataArr)
+                print("updated:", updatedDict)
+                self.saveToFile(file, dataArr)
             case "append":
-                print("Content will be appended")
+                file = open(filePath, 'a')
+                self.appendToFile(file)
+                file.close()
 
     def writeToFile(self, filePath: str, modus: str):
         pass
