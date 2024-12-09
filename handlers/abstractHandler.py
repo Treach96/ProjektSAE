@@ -66,8 +66,9 @@ class Handler(ABC):
 
     @abstractmethod
     def askForLineNumber(self, arr: []):
-        convertedNumber = int(input("Which line do you want to change?\nInsert number"
-                                    "> "))
+        convertedNumber = int(
+            input("Which line do you want to change?\nInsert number"
+                  "> "))
         arrLength = len(arr)
         valid = False
         while not valid:
