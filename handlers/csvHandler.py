@@ -36,6 +36,7 @@ class csvHandler(Handler):
                 updatedDict: dict = self.askForKeyAndUpdateDict(lineDict)
                 dataArr[number]: str = self.convertBackToString(updatedDict)
                 self.printContentWithLineNumber(dataArr)
+                self.saveToFile(file, dataArr)
             case "append":
                 file = open(filePath, 'a')
                 self.appendToFile(file)
