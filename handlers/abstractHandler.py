@@ -29,6 +29,8 @@ class Handler(ABC):
         saveFormat: str = askForSavingFormat()
         dictForm: dict = self.transformArrToDict(dataArr, originalFile)
         if saveFormat == "json":
+            # todo: save dict as file
+            self.
             convertedArr: [] = convertToJson(dictForm)
         # savingArr(file, convertedArr)
         if saveFormat == "csv":
@@ -38,8 +40,12 @@ class Handler(ABC):
         choice: str = input("Do you want to do something else with this file?\n"
                             "chose \"yes\" or \"no\"\n"
                             "> ")
-        if choice == "no":
-            exit()
+        match choice:
+            case "yes":
+                # todo: create while loop to comeback to fileHandler.askForModus()
+                pass
+            case "no":
+                exit()
 
     @abstractmethod
     def transformArrToDict(self, dataArr: [], originalFile: str):
@@ -50,11 +56,17 @@ class Handler(ABC):
         newDict: dict = {}
         print("Original filetype detected: ", originalFile)
         match originalFile:
-             case "json":
-                 pass
-             case "csv":
-                 pass
+            case "json":
+                newDict = self.transformJsonArrToDict(dataArr)
+                return newDict
+            case "csv":
+                newDict = self.transformCsvArrToDict(dataArr)
+                return newDict
 
+    @abstractmethod
+    def transformCsvArrToDict(self, dataArr: []):
+        # todo: transform data Arr to dict
+        pass
 
     @abstractmethod
     def convertBackToString(self, jsonDict: dict):
@@ -100,7 +112,7 @@ class Handler(ABC):
     @abstractmethod
     def askForKey(self, jsonDict: dict):
         listOfKeys = list(jsonDict.keys())
-        print("\nAvailable keys are: [", ', ' .join(listOfKeys), "]\n")
+        print("\nAvailable keys are: [", ', '.join(listOfKeys), "]\n")
         valid = False
         while not valid:
             choice = input("From which key would you like adjust the value?\n"
@@ -174,6 +186,7 @@ class Handler(ABC):
         print("created successfully dict")
         return newDict
 
+
 def savingArr(file, dataArr: []):
     dataLen = len(dataArr) - 1
     for index, item in enumerate(dataArr):
@@ -221,5 +234,3 @@ def saveAsJson(dataArray: []):
 def saveAsCsv(dataArray: []):
     # todo: implement converter
     pass
-
-

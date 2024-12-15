@@ -69,6 +69,7 @@ class jsonHandler(Handler):
         super().saveToFile(file, dataArr, originalFile)
 
     def convertBackToString(self, jsonDict: dict):
+        # todo: transfer to parent and rename to "convertJDictToJArray" or similar
         dataArr: [] = []
         partString: str = ''
         for key, value in jsonDict.items():
