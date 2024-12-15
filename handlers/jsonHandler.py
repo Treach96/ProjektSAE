@@ -1,7 +1,18 @@
+from typing import override
+
 from handlers.abstractHandler import Handler
 
 
 class jsonHandler(Handler):
+
+    def transformJsonArrToDict(self, dataArr: []):
+        pass
+
+    def convertJStringToDict(self, jString: str):
+        super().convertJStringToDict(jString)
+
+    def transformArrToDict(self, dataArr: [], originalFile: str):
+        super().transformArrToDict(dataArr, originalFile)
 
     def useFile(self, filePath: str, modus: str):
         super().modusHandler(modus, filePath)
@@ -19,6 +30,7 @@ class jsonHandler(Handler):
 
     def readAndWrite(self, filePath: str, modus: str):
         choice: str = ""
+        originalFile = "json"
         while choice != "exit":
             choice: str = self.askUserForChoice()
             if choice == "change":
@@ -32,15 +44,16 @@ class jsonHandler(Handler):
                 number: int = self.askForLineNumber(dataArray)
                 lineToAdjust: [str] = self.getLineFromArray(dataArray, number)
                 ### access key
-                jsonDict: dict = self.convertToDict(lineToAdjust)
+                jsonDict: dict = self.convertLineToDict(lineToAdjust)
                 ### set new Value on chosen lineNumber
                 updatedDict: dict = self.askForKeyAndUpdateDict(jsonDict)
                 dataArray[number]: str = self.convertBackToString(updatedDict)
                 self.printContentWithLineNumber(dataArray)
+
                 ### saving content to file
-                self.saveToFile(file, dataArray)
-                file.close
-                # todo: loop glätte
+                self.saveToFile(file, dataArray, originalFile)
+                file.close()
+                # todo: loop glätten
             if choice == "append":
                 file = open(filePath, 'a')
                 self.appendToFile(file)
@@ -52,8 +65,8 @@ class jsonHandler(Handler):
     def appendToFile(self, file):
         super().appendToFile(file)
 
-    def saveToFile(self, file, dataArr: []):
-        super().saveToFile(file, dataArr)
+    def saveToFile(self, file, dataArr: [], originalFile: str):
+        super().saveToFile(file, dataArr, originalFile)
 
     def convertBackToString(self, jsonDict: dict):
         dataArr: [] = []
@@ -80,16 +93,10 @@ class jsonHandler(Handler):
     def askForKeyAndUpdateDict(self, jsonDict: dict):
         return super().askForKeyAndUpdateDict(jsonDict)
 
-    def convertToDict(self, lineToAdjust):
-        jsonDict: dict = {}
-        jsonString: str = lineToAdjust.strip('{}')
-        items: [str] = jsonString.split(',')
+    @override
+    def convertLineToDict(self, lineToAdjust: str):
+        jsonDict: dict = super().convertJStringToDict(lineToAdjust)
 
-        for item in items:
-            key, value = item.split(':')
-            key: str = key.strip('"')
-            value: str = value.strip('"')
-            jsonDict[key]: dict = value
         return jsonDict
 
     def printContentWithLineNumber(self, dataArray: []):
@@ -104,6 +111,7 @@ class jsonHandler(Handler):
     def askForLineNumber(self, arr: []):
         return super().askForLineNumber(arr)
 
+    # todo: use dict to save format and not dataArray
     def createDataArray(self, content: str):
         dataArr: [] = content.split('},')
         dataLen: int = len(dataArr) - 1

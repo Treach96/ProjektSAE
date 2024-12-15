@@ -23,23 +23,38 @@ class Handler(ABC):
                 self.writeToFile(filePath, modus)
 
     @abstractmethod
-    def saveToFile(self, file, dataArr: []):
+    def saveToFile(self, file, dataArr: [], originalFile: str):
+        print("start saving file")
         file.seek(0)
-        saveFormat = askForSavingFormat()
-        if saveFormat == "default":
-            savingArr(file, dataArr)
+        saveFormat: str = askForSavingFormat()
+        dictForm: dict = self.transformArrToDict(dataArr, originalFile)
         if saveFormat == "json":
-            convertedArr: [] = convertToJson(dataArr)
-            savingArr(file, convertedArr)
+            convertedArr: [] = convertToJson(dictForm)
+        # savingArr(file, convertedArr)
         if saveFormat == "csv":
-            convertedArr: [] = convertToCsv(dataArr)
-            savingArr(file, convertedArr)
+            convertedArr: [] = convertToCsv(dictForm)
+            # savingArr(file, convertedArr)
         # todo: ask for futher changes? no-> exit
         choice: str = input("Do you want to do something else with this file?\n"
                             "chose \"yes\" or \"no\"\n"
                             "> ")
         if choice == "no":
             exit()
+
+    @abstractmethod
+    def transformArrToDict(self, dataArr: [], originalFile: str):
+        print('start transforming array to dict')
+        # {"key":"value","key":"value"}
+        # jsonArr: {"id":6,"first_name":"Farand","last_name":"Dunican","gender":"Female","street_name":"Melrose"}
+        # csvArr: 10,Beverly,Grelka,Female,Bunker Hill
+        newDict: dict = {}
+        print("Original filetype detected: ", originalFile)
+        match originalFile:
+             case "json":
+                 pass
+             case "csv":
+                 pass
+
 
     @abstractmethod
     def convertBackToString(self, jsonDict: dict):
@@ -66,7 +81,7 @@ class Handler(ABC):
         pass
 
     @abstractmethod
-    def convertToDict(self, lineToAdjust):
+    def convertLineToDict(self, lineToAdjust):
         pass
 
     @abstractmethod
@@ -84,7 +99,8 @@ class Handler(ABC):
 
     @abstractmethod
     def askForKey(self, jsonDict: dict):
-        print("\nAvailable keys are:", list(jsonDict.keys()), "\n")
+        listOfKeys = list(jsonDict.keys())
+        print("\nAvailable keys are: [", ', ' .join(listOfKeys), "]\n")
         valid = False
         while not valid:
             choice = input("From which key would you like adjust the value?\n"
@@ -115,6 +131,7 @@ class Handler(ABC):
 
     @abstractmethod
     def printContentWithLineNumber(self, dataArray: []):
+        print("Content of Array will be printed.")
         for index, item in enumerate(dataArray):
             print(f"{index}. {item}")
 
@@ -134,6 +151,28 @@ class Handler(ABC):
             case "3":
                 exit()
 
+    @abstractmethod
+    def convertJStringToDict(self, jString: str):
+        newDict: {} = {}
+        tempStr: str = jString.strip('{}')
+        tempArr: [str] = tempStr.split(',')
+
+        for item in tempArr:
+            key, value = item.split(':')
+            key: str = key.strip('"')
+            value: str = value.strip('"')
+            newDict[key]: dict = value
+        print("created successfully dict")
+        return newDict
+
+    @abstractmethod
+    def transformJsonArrToDict(self, dataArr: []):
+        newDict: {} = {}
+        for dataItem in dataArr:
+            itemStr: str = dataItem
+            newDict = self.convertJStringToDict(itemStr)
+        print("created successfully dict")
+        return newDict
 
 def savingArr(file, dataArr: []):
     dataLen = len(dataArr) - 1
@@ -155,6 +194,7 @@ def convertToJson(dataArr: []):
 def convertToCsv(dataArr: []):
     # todo: add converter
     convertedArr: [] = []
+    print("csv:", dataArr)
     return convertedArr
     pass
 
@@ -164,15 +204,12 @@ def askForSavingFormat():
     while not valid:
         choice: str = input(
             "Choose format. Insert number to select your choice.\n"
-            "0. default\n"
             "1. json\n"
             "2. csv\n"
             "> ")
-        if choice == "0":
-            return "default"
-        if choice == "1":
+        if choice == "1" or choice == "json":
             return "json"
-        if choice == "2":
+        if choice == "2" or choice == "csv":
             return "csv"
 
 
@@ -184,3 +221,5 @@ def saveAsJson(dataArray: []):
 def saveAsCsv(dataArray: []):
     # todo: implement converter
     pass
+
+

@@ -4,6 +4,18 @@ from handlers.abstractHandler import Handler
 
 
 class csvHandler(Handler):
+    def convertLineToDict(self, lineToAdjust):
+        pass
+
+    def convertJStringToDict(self, jString: str):
+        pass
+
+    def transformJsonArrToDict(self, dataArr: []):
+        pass
+
+    def transformArrToDict(self, dataArr: [], originalFile: str):
+        super().transformArrToDict(dataArr, originalFile)
+
     def __init__(self):
         pass
 
@@ -23,6 +35,7 @@ class csvHandler(Handler):
 
     def readAndWrite(self, filePath: str, modus: str):
         choice: str = ""
+        key = "csv"
         while choice != "exit":
             choice = self.askUserForChoice()
             if choice == "change":
@@ -33,11 +46,11 @@ class csvHandler(Handler):
                 super().printContentWithLineNumber(dataArr)
                 number: int = self.askForLineNumber(dataArr)
                 lineToAdjust: [] = self.getLineFromArray(dataArr, number)
-                lineDict: dict = self.convertToDict(lineToAdjust, dataArr)
+                lineDict: dict = self.convertLineToDict(lineToAdjust, dataArr)
                 updatedDict: dict = self.askForKeyAndUpdateDict(lineDict)
                 dataArr[number]: str = self.convertBackToString(updatedDict)
                 self.printContentWithLineNumber(dataArr)
-                self.saveToFile(file, dataArr)
+                self.saveToFile(file, dataArr, key)
                 file.close()
             if choice == "append":
                 file = open(filePath, 'a')
@@ -50,8 +63,8 @@ class csvHandler(Handler):
     def appendToFile(self, file):
         super().appendToFile(file)
 
-    def saveToFile(self, file, dataArr: []):
-        super().saveToFile(file, dataArr)
+    def saveToFile(self, file, dataArr: [], originalFile: str):
+        super().saveToFile(file, dataArr, originalFile)
 
     def convertBackToString(self, jsonDict: dict):
         dataArr: [] = []
